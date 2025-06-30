@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    // allow default imports from CommonJS modules
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    // type-safe rules
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    // allow absolute imports from /src
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*"]
+    },
+    // where to find ambient .d.ts expansions
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "types": ["node", "express"]
+  },
+
+  // files to include in compilation
+  "include": [
+    "src/**/*",
+    "src/types/**/*.d.ts",
+    "config/config.js"
+  ],
+
+  // you can optionally exclude build output
+  "exclude": ["node_modules", "dist"]
+}

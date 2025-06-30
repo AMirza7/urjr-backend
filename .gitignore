@@ -1,0 +1,63 @@
+# Node.js
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# dotenv
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+debug.log
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Sequelize specific
+sequelize-output.log
+
+# Custom temporary output
+/tmp
+/temp
+/cache
+scraper_output/
+screenshots/
+captchas/
+
+# Test-related
+jest/
+*.test.ts
+*.spec.ts
+__tests__/
+coverage/
+
+# PM2 logs
+pids/
+*.pid
+*.seed
+
+# Linting
+.eslintcache
+.prettiercache
