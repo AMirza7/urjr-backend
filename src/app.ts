@@ -2,6 +2,26 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+dotenv.config();
+// 2) import *all* your models so Sequelize registers them
+import "./models/User";
+import "./models/State";
+import "./models/City";
+import "./models/LegalTemplate";
+import "./models/Transaction";
+import "./models/Subscription";
+import "./models/Engagement";
+import "./models/Flashcard";
+import "./models/FlashcardSession";
+import "./models/SecureNote";
+import "./models/PinboardPost";
+import "./models/Notification";
+import "./models/LegalToolLog";
+
+import { initAssociations } from "./models/Associations";
+initAssociations(); 
+
 import authRoutes from "./routes/auth";
 import pinboardRouter from "./routes/pinboard";
 import errorHandler from "./middleware/errorHandler";
@@ -19,8 +39,12 @@ import { generateComplaint } from "./controllers/tools/legalComplaintController"
 import analyticsRoutes from "./routes/analytics";
 import clerksRouter from "./routes/clerks";
 import engagementsRouter from "./routes/engagements";
+import availabilityRouter from "./routes/availability";
+import paymentsRouter from "./routes/payments";
+import subscriptionsRouter from "./routes/subscriptions";
+import adminTemplatesRouter from "./routes/adminTemplates";
 
-dotenv.config();
+
 
 const app = express();
 
@@ -39,9 +63,13 @@ app.use("/api/clerks", clerksRouter);
 app.use("/api/engagements", engagementsRouter);
 app.use("/api/secure-notes", secureNotesRoutes);
 app.use("/api/legal-templates", legalTemplateRoutes);
+app.use("/api/admin/templates", adminTemplatesRouter);
 app.use("/api/flashcard-sessions", flashcardSessionRoutes);
+app.use("/api/availability", availabilityRouter);
 app.use("/api/tools", toolRoutes);
 app.use("/api/tools/analytics", analyticsRoutes);
+app.use("/api/payments", paymentsRouter);
+app.use("/api/subscriptions", subscriptionsRouter);
 
 
 // Auth routes POST

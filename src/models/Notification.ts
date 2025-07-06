@@ -1,24 +1,34 @@
+// src/models/Notification.ts
+
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
 
 export interface NotificationAttributes {
   id: string;
   userId: string;
-  type: "email" | "push" | "in_app";
+  type: "email" | "push" | "in_app" | "template_approved" | "template_rejected";
   message: string;
   isRead: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  meta?: object | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export type NotificationCreationAttributes = Optional<NotificationAttributes, "id" | "isRead" | "createdAt" | "updatedAt">;
+export type NotificationCreationAttributes = Optional<
+  NotificationAttributes,
+  "id" | "isRead" | "meta" | "createdAt" | "updatedAt"
+>;
 
-class Notification extends Model<NotificationAttributes, NotificationCreationAttributes> implements NotificationAttributes {
+class Notification
+  extends Model<NotificationAttributes, NotificationCreationAttributes>
+  implements NotificationAttributes
+{
   public id!: string;
   public userId!: string;
-  public type!: "email" | "push" | "in_app";
+  public type!: NotificationAttributes["type"];
   public message!: string;
   public isRead!: boolean;
+  public meta?: object | null;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -34,19 +44,47 @@ Notification.init(
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "user_id",
+      references: { model: "users", key: "id" },
+      onDelete: "CASCADE",
     },
     type: {
-      type: DataTypes.ENUM("email", "push", "in_app"),
+      type: DataTypes.ENUM(
+        "email",
+        "push",
+        "in_app",
+        "template_approved",
+        "template_rejected"
+      ),
       allowNull: false,
+      defaultValue: "in_app",
     },
     message: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     isRead: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
       allowNull: false,
+      defaultValue: false,
+      field: "read",
+    },
+    meta: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      field: "metadata",
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+      field: "created_at",
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+      field: "updated_at",
     },
   },
   {

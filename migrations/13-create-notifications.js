@@ -16,8 +16,15 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       type: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM(
+          'email',
+          'push',
+          'in_app',
+          'template_approved',
+          'template_rejected'
+        ),
         allowNull: false,
+        defaultValue: 'in_app'
       },
       message: {
         type: Sequelize.TEXT,
@@ -39,15 +46,21 @@ module.exports = {
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('now()'),
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('now()'),
       },
     });
   },
 
-  async down(queryInterface) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('notifications');
+    // Drop the enum type so it can be recreated cleanly if you rollback and re-migrate
+    await queryInterface.sequelize.query(
+      `DROP TYPE IF EXISTS "enum_notifications_type";`
+    );
   },
 };

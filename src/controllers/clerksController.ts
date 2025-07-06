@@ -1,10 +1,10 @@
 // src/controllers/clerksController.ts
 import { Request, Response } from "express";
+import { Op } from "sequelize";
 import asyncHandler from "../utils/asyncHandler";
 import User from "../models/User";
-import { Op } from "sequelize";
 import State from "../models/State";
-import City  from "../models/City";
+import City from "../models/City";
 
 export const getClerks = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -20,11 +20,10 @@ export const getClerks = asyncHandler(async (req: Request, res: Response) => {
   };
 
   const where: any = { role: "legal_clerk_typist" };
-
   if (availabilityStatus) where.availabilityStatus = availabilityStatus;
-  if (stateId)            where.stateId = stateId;
-  if (cityId)             where.cityId  = cityId;
-  if (minRating)          where.rating  = { [Op.gte]: parseFloat(minRating) };
+  if (stateId)            where.stateId          = stateId;
+  if (cityId)             where.cityId           = cityId;
+  if (minRating)          where.rating           = { [Op.gte]: parseFloat(minRating) };
 
   const clerks = await User.findAll({
     where,
@@ -40,8 +39,8 @@ export const getClerks = asyncHandler(async (req: Request, res: Response) => {
       "address",
     ],
     include: [
-      { model: State, as: "state", attributes: ["name"] },
-      { model: City,  as: "city",  attributes: ["name"] },
+      { model: State, as: "state", attributes: ["id", "name"] },
+      { model: City,  as: "city",  attributes: ["id", "name"]  },
     ],
   });
 

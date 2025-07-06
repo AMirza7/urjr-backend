@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
-import City from './City';
+
 
 class State extends Model {
   public id!: string;
@@ -21,5 +21,5 @@ State.init({
   tableName: 'states',
 });
 
-State.hasMany(City, { foreignKey: 'stateId', as: 'cities' });
+
 export default State;

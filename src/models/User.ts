@@ -8,8 +8,6 @@ import {
   ModelAttributes,
 } from "sequelize";
 import sequelize from "../config/database";
-import City from './City';
-import State from './State';
 import { Role } from "../types/roles"; // if you centralize your Role type
 
 // 1. Full attribute interface
@@ -289,7 +287,5 @@ User.init(userAttrs as any, {
   timestamps: true,
 });
 
-User.belongsTo(State, { foreignKey: 'stateId', as: 'state' });
-User.belongsTo(City,  { foreignKey: 'cityId',  as: 'city'  });
 
 export default User;
