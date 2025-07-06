@@ -32,6 +32,7 @@ module.exports = {
           "lawyer",
           "junior_lawyer",
           "legal_assistant",
+          "legal_clerk_typist",  // ← added new role
           "office_helper",
           "law_student",
           "admin",
@@ -132,5 +133,7 @@ module.exports = {
 
   async down(queryInterface) {
     await queryInterface.dropTable('users');
+    // Note: if you need to clean up the ENUM type itself, you can additionally run:
+    // await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_users_role";');
   },
 };

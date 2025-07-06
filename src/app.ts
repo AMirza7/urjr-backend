@@ -17,6 +17,8 @@ import flashcardSessionRoutes from "./routes/flashcardSessions";
 import toolRoutes from "./routes/tools";
 import { generateComplaint } from "./controllers/tools/legalComplaintController";
 import analyticsRoutes from "./routes/analytics";
+import clerksRouter from "./routes/clerks";
+import engagementsRouter from "./routes/engagements";
 
 dotenv.config();
 
@@ -25,7 +27,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Auth routes
+// Auth routes .use
 app.use("/api/auth", authRoutes);
 app.use("/api/case-folders", caseFolderRouter);
 app.use("/api/admin", adminRoutes);
@@ -33,12 +35,17 @@ app.use("/api/preferences", preferencesRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/messages", messagesRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/clerks", clerksRouter);
+app.use("/api/engagements", engagementsRouter);
 app.use("/api/secure-notes", secureNotesRoutes);
 app.use("/api/legal-templates", legalTemplateRoutes);
 app.use("/api/flashcard-sessions", flashcardSessionRoutes);
 app.use("/api/tools", toolRoutes);
-app.post("/api/tools/legal-complaint", generateComplaint);
 app.use("/api/tools/analytics", analyticsRoutes);
+
+
+// Auth routes POST
+app.post("/api/tools/legal-complaint", generateComplaint);
 
 
 

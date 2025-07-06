@@ -8,6 +8,9 @@ import {
   ModelAttributes,
 } from "sequelize";
 import sequelize from "../config/database";
+import City from './City';
+import State from './State';
+import { Role } from "../types/roles"; // if you centralize your Role type
 
 // 1. Full attribute interface
 export interface UserAttributes {
@@ -20,6 +23,7 @@ export interface UserAttributes {
     | "lawyer"
     | "junior_lawyer"
     | "legal_assistant"
+    | "legal_clerk_typist"        // ← new
     | "office_helper"
     | "law_student"
     | "admin"
@@ -28,6 +32,10 @@ export interface UserAttributes {
   isApproved: boolean;
   hasVerificationBadge: boolean;
   subscriptionTier: "free" | "pro" | "premium";
+  availabilityStatus: "available" | "busy" | "offline";  // ← new
+  stateId?: string | null;
+  cityId?: string | null;
+  rating: number;
   profilePicture?: string | null;
   bio?: string | null;
   specialization?: string[] | null;
@@ -78,6 +86,11 @@ export type UserCreationAttributes = Optional<
   | "subscriptionTier"
   | "isActive"
   | "preferences"
+  | "availabilityStatus"  // ← make availabilityStatus optional on creation
+  | 'stateId'
+  | 'cityId'
+  | 'rating'
+
 >;
 
 // 3. The Model class
@@ -94,6 +107,7 @@ class User
     | "lawyer"
     | "junior_lawyer"
     | "legal_assistant"
+    | "legal_clerk_typist"
     | "office_helper"
     | "law_student"
     | "admin"
@@ -102,6 +116,10 @@ class User
   public isApproved!: boolean;
   public hasVerificationBadge!: boolean;
   public subscriptionTier!: "free" | "pro" | "premium";
+  public availabilityStatus!: "available" | "busy" | "offline"; // ← new
+  public rating!: number;
+  public stateId!: string | null;
+  public cityId!: string | null;
   public profilePicture!: string | null;
   public bio!: string | null;
   public specialization!: string[] | null;
@@ -145,6 +163,7 @@ const userAttrs: ModelAttributes<User, UserAttributes> = {
       "lawyer",
       "junior_lawyer",
       "legal_assistant",
+      "legal_clerk_typist",  // ← new
       "office_helper",
       "law_student",
       "admin",
@@ -172,6 +191,26 @@ const userAttrs: ModelAttributes<User, UserAttributes> = {
     type: DataTypes.ENUM("free", "pro", "premium"),
     allowNull: false,
     defaultValue: "free",
+  },
+  availabilityStatus: {
+    type: DataTypes.ENUM("available", "busy", "offline"),  // ← new
+    allowNull: false,
+    defaultValue: "offline",
+  },
+  rating: {
+    type: DataTypes.DECIMAL(2,1),
+    allowNull: false,
+    defaultValue: 0.0,
+  },
+  stateId: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: { model: 'states', key: 'id' },
+  },
+  cityId: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: { model: 'cities', key: 'id' },
   },
   profilePicture: {
     type: DataTypes.STRING,
@@ -242,12 +281,15 @@ const userAttrs: ModelAttributes<User, UserAttributes> = {
   },
 };
 
-// 5. Initialize (cast just for this call)
+// 5. Initialize
 User.init(userAttrs as any, {
   sequelize,
   modelName: "User",
   tableName: "users",
   timestamps: true,
 });
+
+User.belongsTo(State, { foreignKey: 'stateId', as: 'state' });
+User.belongsTo(City,  { foreignKey: 'cityId',  as: 'city'  });
 
 export default User;
