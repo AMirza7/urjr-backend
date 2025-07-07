@@ -2,6 +2,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import rateLimit from 'express-rate-limit';
+import sectionsV1Router from './routes/sections'; // this now serves v1
+
 
 dotenv.config();
 // 2) import *all* your models so Sequelize registers them
@@ -43,6 +46,7 @@ import availabilityRouter from "./routes/availability";
 import paymentsRouter from "./routes/payments";
 import subscriptionsRouter from "./routes/subscriptions";
 import adminTemplatesRouter from "./routes/adminTemplates";
+import sectionsRouter from './routes/sections';
 
 
 
@@ -70,6 +74,7 @@ app.use("/api/tools", toolRoutes);
 app.use("/api/tools/analytics", analyticsRoutes);
 app.use("/api/payments", paymentsRouter);
 app.use("/api/subscriptions", subscriptionsRouter);
+app.use('/api/sections', sectionsRouter);
 
 
 // Auth routes POST
@@ -78,6 +83,15 @@ app.post("/api/tools/legal-complaint", generateComplaint);
 
 
 
+// 1️⃣ Versioned mount
+// Rate‐limit to 100 requests per minute per IP
+const sectionsLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 100,
+  message: { error: 'Too many requests, please slow down.' },
+});
+
+app.use('/api/v1/sections', sectionsLimiter, sectionsV1Router);
 
 
 // Pinboard routes
@@ -95,5 +109,8 @@ app.use((req, res) => {
 
 // Global error handler
 app.use(errorHandler);
+
+
+app.use(cors({ origin: '*' }));
 
 export default app;

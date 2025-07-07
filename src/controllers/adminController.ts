@@ -90,6 +90,7 @@ export const updateUserRole = async (req: Request, res: Response, next: NextFunc
         "junior_lawyer",
         "legal_assistant",
         "office_helper",
+        "legal_clerk",
         "law_student",
         "admin",
         "user",

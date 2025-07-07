@@ -30,7 +30,7 @@ export const getEngagements = asyncHandler(
   async (req: Request, res: Response) => {
     const user = (req as any).user as User;
     const where: any =
-      user.role === "legal_clerk_typist"
+      user.role === "legal_clerk"
         ? { clerkId: user.id }
         : { clientId: user.id };
 

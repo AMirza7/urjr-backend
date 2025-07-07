@@ -11,6 +11,7 @@ export const registerSchema = z.object({
     "junior_lawyer",
     "legal_assistant",
     "office_helper",
+    "legal_clerk",
     "law_student",
     "admin",
     "user"

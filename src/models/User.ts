@@ -21,7 +21,7 @@ export interface UserAttributes {
     | "lawyer"
     | "junior_lawyer"
     | "legal_assistant"
-    | "legal_clerk_typist"        // ← new
+    | "legal_clerk"        // ← new
     | "office_helper"
     | "law_student"
     | "admin"
@@ -105,7 +105,7 @@ class User
     | "lawyer"
     | "junior_lawyer"
     | "legal_assistant"
-    | "legal_clerk_typist"
+    | "legal_clerk"
     | "office_helper"
     | "law_student"
     | "admin"
@@ -161,7 +161,7 @@ const userAttrs: ModelAttributes<User, UserAttributes> = {
       "lawyer",
       "junior_lawyer",
       "legal_assistant",
-      "legal_clerk_typist",  // ← new
+      "legal_clerk",  // ← new
       "office_helper",
       "law_student",
       "admin",

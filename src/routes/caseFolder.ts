@@ -18,6 +18,7 @@ const allowedRoles = [
   "junior_lawyer",
   "legal_assistant",
   "office_helper",
+  "legal_clerk",
   "law_student",
   "admin",
   "user"

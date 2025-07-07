@@ -2,7 +2,14 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // ensure uuid-ossp is enabled in an earlier migration
+    // 1️⃣ Drop the old enum type if it exists,
+    //    clearing the way for a fresh definition.
+    await queryInterface.sequelize.query(`
+      DROP TYPE IF EXISTS "enum_users_role";
+    `);
+
+    // 2️⃣ Create the users table (this will recreate enum_users_role
+    //    with your updated list, including "legal_clerk")
     await queryInterface.createTable('users', {
       id: {
         type: Sequelize.UUID,
@@ -32,7 +39,7 @@ module.exports = {
           "lawyer",
           "junior_lawyer",
           "legal_assistant",
-          "legal_clerk_typist",  // ← added new role
+          "legal_clerk",   // ← your new role
           "office_helper",
           "law_student",
           "admin",
@@ -132,8 +139,7 @@ module.exports = {
   },
 
   async down(queryInterface) {
+    // Dropping the users table will also drop enum_users_role automatically
     await queryInterface.dropTable('users');
-    // Note: if you need to clean up the ENUM type itself, you can additionally run:
-    // await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_users_role";');
   },
 };

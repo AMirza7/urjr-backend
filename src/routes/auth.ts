@@ -17,6 +17,7 @@ router.get(
     "lawyer",
     "junior_lawyer",
     "legal_assistant",
+    "legal_clerk",
     "office_helper",
     "law_student",
     "admin",
