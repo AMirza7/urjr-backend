@@ -2,14 +2,12 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // 1️⃣ Drop the old enum type if it exists,
-    //    clearing the way for a fresh definition.
+    // 1️⃣ Drop the old enum type if it exists
     await queryInterface.sequelize.query(`
       DROP TYPE IF EXISTS "enum_users_role";
     `);
 
-    // 2️⃣ Create the users table (this will recreate enum_users_role
-    //    with your updated list, including "legal_clerk")
+    // 2️⃣ Create the users table with updated phone column
     await queryInterface.createTable('users', {
       id: {
         type: Sequelize.UUID,
@@ -27,8 +25,9 @@ module.exports = {
         allowNull: false,
       },
       phone: {
-        type: Sequelize.STRING,
-        allowNull: true,
+        type: Sequelize.STRING(10),   // enforce exactly 10 characters
+        allowNull: false,             // make phone mandatory
+        unique: true,                 // no duplicate phone numbers
       },
       name: {
         type: Sequelize.STRING,
@@ -39,7 +38,7 @@ module.exports = {
           "lawyer",
           "junior_lawyer",
           "legal_assistant",
-          "legal_clerk",   // ← your new role
+          "legal_clerk",
           "office_helper",
           "law_student",
           "admin",

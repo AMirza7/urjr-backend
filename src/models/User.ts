@@ -15,7 +15,7 @@ export interface UserAttributes {
   id: string;
   email: string;
   password: string;
-  phone?: string | null;
+  phone: string;
   name: string;
   role:
     | "lawyer"
@@ -67,7 +67,6 @@ export interface UserAttributes {
 export type UserCreationAttributes = Optional<
   UserAttributes,
   | "id"
-  | "phone"
   | "profilePicture"
   | "bio"
   | "specialization"
@@ -99,7 +98,7 @@ class User
   public id!: string;
   public email!: string;
   public password!: string;
-  public phone!: string | null;
+  public phone!: string;
   public name!: string;
   public role!:
     | "lawyer"
@@ -139,18 +138,25 @@ const userAttrs: ModelAttributes<User, UserAttributes> = {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
+  email: { 
+    type: DataTypes.STRING, 
+    allowNull: false, 
+    unique: true 
   },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  password: { 
+    type: DataTypes.STRING, 
+    allowNull: false 
   },
   phone: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    unique: true,
+    validate: {
+      is: {
+        args: [/^[6-9]\d{9}$/],
+        msg: "Phone must be a 10-digit Indian number",
+      },
+    },
   },
   name: {
     type: DataTypes.STRING,

@@ -3,7 +3,7 @@ export type Role =
   | "lawyer"
   | "junior_lawyer"
   | "legal_assistant"
-  | "legal_clerk_typist"  
+  | "legal_clerk"  
   | "office_helper"
   | "law_student"
   | "admin"
